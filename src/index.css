@@ -1,0 +1,29 @@
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+
+:root {
+--navy: #353F59;
+--gold: #DDB05F;
+--navy-light: #4a5670;
+--navy-dark: #252d3d;
+--gold-light: #e8c98a;
+--white: #ffffff;
+--grey: #f4f5f7;
+--grey-dark: #8892a4;
+--text: #1a1f2e;
+}
+
+body {
+font-family: 'Segoe UI', sans-serif;
+background-color: var(--grey);
+color: var(--text);
+min-height: 100vh;
+}
+
+#root {
+min-height: 100vh;
+}
+

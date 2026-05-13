@@ -35,6 +35,10 @@ return text
 .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
 .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
 .replace(/<[^>]*>/g, ' ')
+.replace(/https?:\/\/[^\s]*/g, '')
+.replace(/eu\/sites\/[^\s]*/g, '')
+.replace(/\/sites\/[^\s]*/g, '')
+.replace(/[a-zA-Z0-9_-]+\.(pdf|doc|xml|html)/gi, '')
 .replace(/&amp;/g, '&')
 .replace(/&lt;/g, '<')
 .replace(/&gt;/g, '>')
@@ -51,6 +55,16 @@ if (cdataMatch) return cleanText(cdataMatch[1])
 const plainMatch = xml.match(new RegExp(`<${tag}>([\\s\\S]*?)<\\/${tag}>`))
 if (plainMatch) return cleanText(plainMatch[1])
 return ''
+}
+
+function getGoodSentences(text) {
+return text
+.split('.')
+.map(s => s.trim())
+.filter(s => s.length > 30 && !s.includes('/') && !s.includes('_') && !s.includes('='))
+.slice(0, 2)
+.join('. ')
+.trim()
 }
 
 function getCategory(title, summary) {
@@ -88,24 +102,16 @@ const link = extractText(item, 'link') || extractText(item, 'guid')
 const date = extractText(item, 'pubDate')
 let summary = extractText(item, 'description')
 
-if (source.name === 'ESMA' || source.name === 'EBA') {
-summary = summary
-.split('.')
-.filter(s => s.trim().length > 15 && !s.includes('=') && !s.includes('class'))
-.slice(0, 2)
-.join('. ')
-.trim()
-if (summary) summary = summary + '.'
-}
+summary = getGoodSentences(summary)
 
 if (!summary || summary.length < 20) {
-summary = extractText(item, 'content:encoded')
+summary = getGoodSentences(extractText(item, 'content:encoded'))
 }
 if (summary.length > 350) {
 summary = summary.slice(0, 350) + '...'
 }
 if (!summary || summary.length < 20) {
-summary = `Publication de ${source.name} — cliquez pour lire l'article complet.`
+summary = `Publication de ${source.name} — cliquez sur le titre pour lire l'article complet.`
 }
 
 if (title && title.length > 5) {
@@ -132,4 +138,3 @@ const result = articles.length > 3 ? articles : fallback
 result.sort((a, b) => new Date(b.date) - new Date(a.date))
 res.status(200).json(result)
 }
-

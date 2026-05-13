@@ -2,21 +2,17 @@ export default async function handler(req, res) {
 res.setHeader('Access-Control-Allow-Origin', '*')
 
 const sources = [
-{ name: 'AMF', country: 'France', url: 'https://www.amf-france.org/fr/rss.xml' },
-{ name: 'AMF Sanctions', country: 'France', url: 'https://www.amf-france.org/fr/sanctions-et-transactions/rss.xml' },
-{ name: 'ACPR', country: 'France', url: 'https://acpr.banque-france.fr/rss.xml' },
+{ name: 'AMF', country: 'France', url: 'https://www.amf-france.org/fr/flux-rss/display/30' },
+{ name: 'AMF Publications', country: 'France', url: 'https://www.amf-france.org/fr/flux-rss/display/21' },
+{ name: 'AMF Sanctions', country: 'France', url: 'https://www.amf-france.org/fr/flux-rss/display/25' },
 { name: 'Legifrance', country: 'France', url: 'https://www.legifrance.gouv.fr/rss/jorf.xml' },
-{ name: 'Banque de France', country: 'France', url: 'https://www.banque-france.fr/rss.xml' },
 { name: 'CSSF', country: 'Luxembourg', url: 'https://www.cssf.lu/fr/feed/' },
 { name: 'CSSF Communiqués', country: 'Luxembourg', url: 'https://www.cssf.lu/fr/category/communiques/feed/' },
-{ name: 'BCL', country: 'Luxembourg', url: 'https://www.bcl.lu/fr/rss/publications.xml' },
 { name: 'ESMA', country: 'Europe', url: 'https://www.esma.europa.eu/rss.xml' },
 { name: 'EBA', country: 'Europe', url: 'https://www.eba.europa.eu/rss.xml' },
 { name: 'EIOPA', country: 'Europe', url: 'https://www.eiopa.europa.eu/rss.xml' },
-{ name: 'ECB', country: 'Europe', url: 'https://www.ecb.europa.eu/rss/press.html' },
 { name: 'EUR-Lex', country: 'Europe', url: 'https://eur-lex.europa.eu/rss/eurlex_fr.xml' },
 { name: 'Commission Européenne', country: 'Europe', url: 'https://ec.europa.eu/commission/presscorner/api/rss' },
-{ name: 'ESRB', country: 'Europe', url: 'https://www.esrb.europa.eu/rss/news.xml' },
 ]
 
 const fallback = [

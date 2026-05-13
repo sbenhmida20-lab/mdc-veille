@@ -20,8 +20,8 @@ const sources = [
 ]
 
 const fallback = [
-{ id: 'f1', title: 'AMF : Nouvelles sanctions en matière d\'abus de marché', source: 'AMF', country: 'France', date: '2026-05-10', summary: 'L\'AMF a prononcé plusieurs sanctions à l\'encontre de sociétés de gestion ayant enfreint le règlement MAR. Ces décisions concernent des manquements aux obligations de déclaration et de prévention des abus de marché.', url: 'https://www.amf-france.org', category: 'Sanctions', liked: false, favorited: false },
-{ id: 'f2', title: 'ESMA publie ses orientations MIFID II 2026', source: 'ESMA', country: 'Europe', date: '2026-05-08', summary: 'L\'ESMA met à jour ses orientations concernant les exigences de transparence sous MIFID II pour les PSI. Ces nouvelles orientations visent à harmoniser les pratiques de reporting au sein de l\'Union Européenne.', url: 'https://www.esma.europa.eu', category: 'MIFID II', liked: false, favorited: false },
+{ id: 'f1', title: 'AMF : Nouvelles sanctions en matière d\'abus de marché', source: 'AMF', country: 'France', date: '2026-05-10', summary: 'L\'AMF a prononcé plusieurs sanctions à l\'encontre de sociétés de gestion ayant enfreint le règlement MAR.', url: 'https://www.amf-france.org', category: 'Sanctions', liked: false, favorited: false },
+{ id: 'f2', title: 'ESMA publie ses orientations MIFID II 2026', source: 'ESMA', country: 'Europe', date: '2026-05-08', summary: 'L\'ESMA met à jour ses orientations concernant les exigences de transparence sous MIFID II pour les PSI.', url: 'https://www.esma.europa.eu', category: 'MIFID II', liked: false, favorited: false },
 { id: 'f3', title: 'CSSF : Mise à jour des exigences AIFM au Luxembourg', source: 'CSSF', country: 'Luxembourg', date: '2026-05-06', summary: 'La CSSF publie une circulaire précisant les nouvelles obligations des gestionnaires de FIA au Luxembourg.', url: 'https://www.cssf.lu', category: 'AIFM', liked: false, favorited: false },
 { id: 'f4', title: 'ACPR : Rapport annuel sur le contrôle des SGP', source: 'ACPR', country: 'France', date: '2026-05-05', summary: 'L\'ACPR publie son rapport annuel détaillant les principaux manquements constatés chez les SGP en 2025.', url: 'https://acpr.banque-france.fr', category: 'Contrôle interne', liked: false, favorited: false },
 { id: 'f5', title: 'EBA : Nouvelles règles LCB-FT', source: 'EBA', country: 'Europe', date: '2026-05-03', summary: 'L\'EBA publie des guidelines révisées en matière de lutte contre le blanchiment pour les établissements financiers.', url: 'https://www.eba.europa.eu', category: 'LCB-FT', liked: false, favorited: false },
@@ -88,6 +88,16 @@ const link = extractText(item, 'link') || extractText(item, 'guid')
 const date = extractText(item, 'pubDate')
 let summary = extractText(item, 'description')
 
+if (source.name === 'ESMA' || source.name === 'EBA') {
+summary = summary
+.split('.')
+.filter(s => s.trim().length > 15 && !s.includes('=') && !s.includes('class'))
+.slice(0, 2)
+.join('. ')
+.trim()
+if (summary) summary = summary + '.'
+}
+
 if (!summary || summary.length < 20) {
 summary = extractText(item, 'content:encoded')
 }
@@ -122,3 +132,4 @@ const result = articles.length > 3 ? articles : fallback
 result.sort((a, b) => new Date(b.date) - new Date(a.date))
 res.status(200).json(result)
 }
+
